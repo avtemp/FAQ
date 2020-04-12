@@ -1,0 +1,28 @@
+JS
+Console.log isn`t working. 
+
+I'm working on a site where some JS (or other) code is preventing console.log from working (console.log is probably overwritten). 
+You can test this by checking if console.log works on a different page (like this one).
+
+Type console.log in the console and check what function gets returned.
+If you see ƒ log() { [native code] } then it's something else.
+If you see ƒ (){} then somewhere down the line the native console.log function was changed.
+Was working on a client's site today and that was the issue.
+If that's the case, you can either manually restore the console.log function or use console.dir() or console.warn() instead.
+
+RESTORE:
+
+function restoreConsole() {
+  // Create an iframe for start a new console session
+  var iframe = document.createElement('iframe');
+  // Hide iframe
+  iframe.style.display = 'none';
+  // Inject iframe on body document
+  document.body.appendChild(iframe);
+  // Reassign the global variable console with the new console session of the iframe
+  console = iframe.contentWindow.console;
+  window.console = console;
+  // Don't remove the iframe or console session will be closed
+}
+
+restoreConsole();
